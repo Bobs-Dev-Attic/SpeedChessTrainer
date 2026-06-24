@@ -23,6 +23,42 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="manifest" href="manifest.json">
 
+  <script>
+    // Capture the PWA install prompt so the app can offer an "Install app"
+    // button (see lib/services/install_prompt_web.dart).
+    (function () {
+      var deferred = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferred = e;
+        window.dispatchEvent(new Event('pwa-install-available'));
+      });
+      window.addEventListener('appinstalled', function () {
+        deferred = null;
+      });
+      window.flutterCanInstall = function () { return !!deferred; };
+      window.flutterInstallApp = function () {
+        if (!deferred) return Promise.resolve(false);
+        deferred.prompt();
+        return deferred.userChoice.then(function (choice) {
+          deferred = null;
+          return !!choice && choice.outcome === 'accepted';
+        });
+      };
+    })();
+
+    // Register our own service worker for offline support (Flutter's built-in
+    // one no longer caches). Built with --pwa-strategy=none so this is the
+    // only service worker.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function (e) {
+          console.warn('SW registration failed:', e);
+        });
+      });
+    }
+  </script>
+
   <style>
     html, body {
       margin: 0;

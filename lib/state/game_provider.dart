@@ -32,6 +32,7 @@ class GameProvider extends ChangeNotifier {
   late Personality _personality;
   late TimeControl _timeControl;
   bool _humanIsWhite = true;
+  bool _useClock = true;
 
   int _whiteMs = 0;
   int _blackMs = 0;
@@ -51,6 +52,7 @@ class GameProvider extends ChangeNotifier {
   Personality get personality => _personality;
   TimeControl get timeControl => _timeControl;
   bool get humanIsWhite => _humanIsWhite;
+  bool get useClock => _useClock;
   int get whiteMs => _whiteMs;
   int get blackMs => _blackMs;
   bool get aiThinking => _aiThinking;
@@ -95,6 +97,7 @@ class GameProvider extends ChangeNotifier {
     required Personality personality,
     required TimeControl timeControl,
     required bool humanIsWhite,
+    bool useClock = true,
   }) {
     _ticker?.cancel();
     _gameId++;
@@ -102,6 +105,7 @@ class GameProvider extends ChangeNotifier {
     _personality = personality;
     _timeControl = timeControl;
     _humanIsWhite = humanIsWhite;
+    _useClock = useClock;
 
     _game = ch.Chess();
     _fens
@@ -119,7 +123,7 @@ class GameProvider extends ChangeNotifier {
     _status = GameStatus.playing;
     _resultText = '';
 
-    _startTicker();
+    if (_useClock) _startTicker();
     notifyListeners();
 
     // If the AI is White it moves first.
@@ -133,6 +137,7 @@ class GameProvider extends ChangeNotifier {
       personality: _personality,
       timeControl: _timeControl,
       humanIsWhite: _humanIsWhite,
+      useClock: _useClock,
     );
   }
 
@@ -204,12 +209,14 @@ class GameProvider extends ChangeNotifier {
     final ok = _game.move(move);
     if (ok == false) return false;
 
-    // Increment for the side that just moved.
-    final incMs = _timeControl.incrementSeconds * 1000;
-    if (addedToColor == ch.Color.WHITE) {
-      _whiteMs += incMs;
-    } else {
-      _blackMs += incMs;
+    // Increment for the side that just moved (only when the clock is on).
+    if (_useClock) {
+      final incMs = _timeControl.incrementSeconds * 1000;
+      if (addedToColor == ch.Color.WHITE) {
+        _whiteMs += incMs;
+      } else {
+        _blackMs += incMs;
+      }
     }
 
     _fens.add(_game.fen);

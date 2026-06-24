@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../models/board_theme.dart';
 import '../models/time_control.dart';
+import '../services/install_prompt.dart';
 import '../state/settings_provider.dart';
 import '../theme/app_themes.dart';
 
@@ -19,7 +21,18 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           const _Label('Time control'),
-          _TimeControlPicker(settings: settings),
+          Card(
+            child: SwitchListTile(
+              title: const Text('Use chess clock'),
+              subtitle: const Text('Turn off for untimed, unlimited games'),
+              value: settings.timerEnabled,
+              onChanged: settings.setTimerEnabled,
+            ),
+          ),
+          if (settings.timerEnabled) ...[
+            const SizedBox(height: 12),
+            _TimeControlPicker(settings: settings),
+          ],
           const SizedBox(height: 20),
           const _Label('Appearance'),
           _ThemeModePicker(settings: settings),
@@ -31,6 +44,59 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 20),
           const _Label('Gameplay'),
           _ToggleCard(settings: settings),
+          const SizedBox(height: 20),
+          const _Label('About'),
+          const _AboutSection(),
+        ],
+      ),
+    );
+  }
+}
+
+/// Install-app (PWA) action and app version.
+class _AboutSection extends StatelessWidget {
+  const _AboutSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: installController.available,
+            builder: (context, canInstall, _) {
+              if (!canInstall || installController.isStandalone) {
+                return const SizedBox.shrink();
+              }
+              return Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.install_mobile),
+                    title: const Text('Install app'),
+                    subtitle:
+                        const Text('Add to your device for offline play'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => installController.prompt(),
+                  ),
+                  const Divider(height: 1),
+                ],
+              );
+            },
+          ),
+          FutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) {
+              final info = snapshot.data;
+              final version = info == null
+                  ? '…'
+                  : 'v${info.version} (build ${info.buildNumber})';
+              return ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: const Text('Version'),
+                subtitle: Text(version),
+              );
+            },
+          ),
         ],
       ),
     );

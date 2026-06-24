@@ -13,12 +13,41 @@ class ClockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final game = context.watch<GameProvider>();
+    final scheme = Theme.of(context).colorScheme;
+
+    // Untimed game: show an infinity badge instead of a countdown.
+    if (!game.useClock) {
+      final active = !game.isGameOver &&
+          game.turn == (forWhite ? ch.Color.WHITE : ch.Color.BLACK);
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: active ? scheme.primary : scheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.all_inclusive,
+                size: 18,
+                color: active ? scheme.onPrimary : scheme.onSurface),
+            const SizedBox(width: 8),
+            Text('No clock',
+                style: TextStyle(
+                  color: active ? scheme.onPrimary : scheme.onSurface,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                )),
+          ],
+        ),
+      );
+    }
+
     final ms = forWhite ? game.whiteMs : game.blackMs;
     final isActive = !game.isGameOver &&
         game.turn == (forWhite ? ch.Color.WHITE : ch.Color.BLACK);
     final low = ms <= 10000;
 
-    final scheme = Theme.of(context).colorScheme;
     final bg = isActive
         ? (low ? const Color(0xFFB71C1C) : scheme.primary)
         : scheme.surfaceContainerHighest;

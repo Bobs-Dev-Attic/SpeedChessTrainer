@@ -26,6 +26,7 @@ class SettingsProvider extends ChangeNotifier {
   bool _showLastMove = true;
   bool _hintsEnabled = true;
   bool _autoQueen = true;
+  bool _timerEnabled = true;
 
   TimeControl _timeControl = TimeControl.defaultControl;
   String _opponentId = 'level_casual';
@@ -44,6 +45,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get showLastMove => _showLastMove;
   bool get hintsEnabled => _hintsEnabled;
   bool get autoQueen => _autoQueen;
+  bool get timerEnabled => _timerEnabled;
   TimeControl get timeControl => _timeControl;
   String get opponentId => _opponentId;
   Opponent get opponent => Opponent.byId(_opponentId);
@@ -102,6 +104,12 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTimerEnabled(bool v) {
+    _timerEnabled = v;
+    _prefs?.setBool('timerEnabled', v);
+    notifyListeners();
+  }
+
   void setTimeControl(TimeControl tc) {
     _timeControl = tc;
     _prefs?.setString('timeControl',
@@ -155,6 +163,7 @@ class SettingsProvider extends ChangeNotifier {
     _showLastMove = _prefs?.getBool('showLastMove') ?? _showLastMove;
     _hintsEnabled = _prefs?.getBool('hintsEnabled') ?? _hintsEnabled;
     _autoQueen = _prefs?.getBool('autoQueen') ?? _autoQueen;
+    _timerEnabled = _prefs?.getBool('timerEnabled') ?? _timerEnabled;
     _opponentId = _prefs?.getString('opponent') ?? _opponentId;
 
     final tc = _prefs?.getString('timeControl');

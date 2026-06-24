@@ -24,7 +24,9 @@ flutter --version
 flutter config --enable-web --no-analytics
 flutter pub get
 # --no-web-resources-cdn bundles CanvasKit with the app instead of fetching it
-# from gstatic.com at runtime, so the app works even where that CDN is blocked.
-flutter build web --release --no-web-resources-cdn
+#   from gstatic.com at runtime, so the app works even where that CDN is blocked.
+# --pwa-strategy=none disables Flutter's (no-op) service worker so our own
+#   web/sw.js handles offline caching instead.
+flutter build web --release --no-web-resources-cdn --pwa-strategy=none
 
 echo "Build complete → build/web"

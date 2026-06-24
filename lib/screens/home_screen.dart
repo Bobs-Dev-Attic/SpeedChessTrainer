@@ -79,6 +79,7 @@ class HomeScreen extends StatelessWidget {
           personality: settings.activePersonality,
           timeControl: settings.timeControl,
           humanIsWhite: humanIsWhite,
+          useClock: settings.timerEnabled,
         );
 
     Navigator.of(context).push(
@@ -255,7 +256,9 @@ class _TimeControlRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${tc.category} · ${tc.label}',
+                      settings.timerEnabled
+                          ? '${tc.category} · ${tc.label}'
+                          : 'No clock · unlimited time',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
