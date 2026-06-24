@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/opponent.dart';
 import '../state/game_provider.dart';
 import '../state/settings_provider.dart';
+import '../widgets/piece_view.dart';
 import 'game_screen.dart';
 import 'opponent_select_screen.dart';
 import 'settings_screen.dart';
@@ -104,11 +105,7 @@ class _Hero extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text('♞',
-              style: TextStyle(
-                  fontSize: 56,
-                  fontFamily: 'NotoChessSymbols',
-                  color: Colors.white)),
+          const PieceView(glyph: '♞', size: 64, isWhite: true),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

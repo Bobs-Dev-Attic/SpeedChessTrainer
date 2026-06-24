@@ -6,6 +6,7 @@ import '../models/board_theme.dart';
 import '../state/game_provider.dart';
 import '../state/settings_provider.dart';
 import '../utils/piece_glyphs.dart';
+import 'piece_view.dart';
 
 /// The 2D, top-down chess board. Handles selection, legal-move dots,
 /// last-move / hint / check highlighting, coordinates and promotion.
@@ -175,26 +176,10 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
           // The piece.
           if (piece != null)
             Center(
-              child: Text(
-                PieceGlyphs.forType(piece.type),
-                style: TextStyle(
-                  fontSize: squareSize * 0.78,
-                  height: 1.0,
-                  // Force the bundled monochrome chess font so the text
-                  // colour is honoured (otherwise an emoji/colour font can
-                  // render every piece as a solid black glyph).
-                  fontFamily: 'NotoChessSymbols',
-                  color: piece.color == ch.Color.WHITE
-                      ? Colors.white
-                      : const Color(0xFF1A1A1A),
-                  shadows: piece.color == ch.Color.WHITE
-                      ? const [
-                          Shadow(color: Colors.black54, blurRadius: 1.5),
-                        ]
-                      : const [
-                          Shadow(color: Colors.white24, blurRadius: 1),
-                        ],
-                ),
+              child: PieceView(
+                glyph: PieceGlyphs.forType(piece.type),
+                size: squareSize * 0.82,
+                isWhite: piece.color == ch.Color.WHITE,
               ),
             ),
           // Legal-move indicator.
@@ -313,7 +298,6 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
   }
 
   Future<String?> _askPromotion(BuildContext context, bool isWhite) {
-    final color = isWhite ? Colors.white : const Color(0xFF1A1A1A);
     return showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -326,14 +310,10 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
                 onTap: () => Navigator.of(ctx).pop(p),
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(
-                    PieceGlyphs.forLetter(p),
-                    style: TextStyle(
-                      fontSize: 44,
-                      fontFamily: 'NotoChessSymbols',
-                      color: color,
-                      shadows: const [Shadow(color: Colors.black26, blurRadius: 2)],
-                    ),
+                  child: PieceView(
+                    glyph: PieceGlyphs.forLetter(p),
+                    size: 48,
+                    isWhite: isWhite,
                   ),
                 ),
               ),

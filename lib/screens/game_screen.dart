@@ -195,7 +195,12 @@ class _PlayerPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              CapturedPieces(captured: captured, advantage: advantage),
+              CapturedPieces(
+                captured: captured,
+                advantage: advantage,
+                // A player captures the opposing army's pieces.
+                whitePieces: !forWhite,
+              ),
             ],
           ),
         ),

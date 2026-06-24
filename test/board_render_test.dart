@@ -8,9 +8,10 @@ import 'package:speed_chess_trainer/state/game_provider.dart';
 import 'package:speed_chess_trainer/state/settings_provider.dart';
 import 'package:speed_chess_trainer/theme/app_themes.dart';
 import 'package:speed_chess_trainer/widgets/chess_board_widget.dart';
+import 'package:speed_chess_trainer/widgets/piece_view.dart';
 
 void main() {
-  testWidgets('white pieces render white, black pieces dark, monochrome font',
+  testWidgets('white pawns render as white pieces, black as dark',
       (tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
@@ -37,20 +38,17 @@ void main() {
     );
     await tester.pump();
 
-    // All 16 pawns use the filled glyph ♟ (U+265F), distinguished by colour.
-    final pawns = tester.widgetList<Text>(find.text('♟')).toList();
+    // All 16 pawns render via PieceView using the filled glyph ♟ (U+265F).
+    final pawns = tester
+        .widgetList<PieceView>(find.byType(PieceView))
+        .where((p) => p.glyph == '♟')
+        .toList();
     expect(pawns.length, 16);
 
-    final white = pawns.where((t) => t.style?.color == Colors.white).length;
-    final black =
-        pawns.where((t) => t.style?.color == const Color(0xFF1A1A1A)).length;
+    final white = pawns.where((p) => p.isWhite).length;
+    final black = pawns.where((p) => !p.isWhite).length;
     expect(white, 8, reason: 'white player should have 8 white pawns');
     expect(black, 8, reason: 'opponent should have 8 dark pawns');
-
-    for (final t in pawns) {
-      expect(t.style?.fontFamily, 'NotoChessSymbols',
-          reason: 'pieces must use the bundled monochrome chess font');
-    }
 
     game.resign(); // stop the clock timer before the test ends
     await tester.pump();
