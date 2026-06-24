@@ -1,0 +1,11 @@
+{
+  "name": "Speed Chess Trainer",
+  "short_name": "Chess Trainer",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1b1b1f",
+  "theme_color": "#769656",
+  "description": "Learn and improve at speed chess against configurable AI personalities and chess legends.",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}
