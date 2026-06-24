@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "bash vercel_build.sh",
+  "outputDirectory": "build/web",
+  "framework": null,
+  "installCommand": "echo 'Flutter SDK is installed during the build step'",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
