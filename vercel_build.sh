@@ -23,10 +23,23 @@ export PATH="$SDK_DIR/bin:$PATH"
 flutter --version
 flutter config --enable-web --no-analytics
 flutter pub get
+
+# Build identifiers so the running app can show exactly which deploy it is.
+GIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+BUILD_TIME="$(date -u '+%Y-%m-%d %H:%M UTC')"
+BUILD_ID="${GIT_SHA}-$(date -u +%s)"
+
 # --no-web-resources-cdn bundles CanvasKit with the app instead of fetching it
 #   from gstatic.com at runtime, so the app works even where that CDN is blocked.
 # --pwa-strategy=none disables Flutter's (no-op) service worker so our own
 #   web/sw.js handles offline caching instead.
-flutter build web --release --no-web-resources-cdn --pwa-strategy=none
+flutter build web --release --no-web-resources-cdn --pwa-strategy=none \
+  --dart-define=GIT_SHA="$GIT_SHA" \
+  --dart-define=BUILD_TIME="$BUILD_TIME"
 
-echo "Build complete → build/web"
+# Stamp the service worker cache name with this build so a new deploy
+# invalidates the old cache (otherwise main.dart.js, which is not content
+# hashed, would be served stale forever).
+sed -i "s/__BUILD_ID__/${BUILD_ID}/g" build/web/sw.js
+
+echo "Build complete → build/web (build ${GIT_SHA} @ ${BUILD_TIME})"

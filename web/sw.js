@@ -6,7 +6,11 @@
 // Navigations are network-first (so updates are picked up online) and fall
 // back to the cached shell when offline; all other assets are cache-first.
 
-const CACHE = 'speed-chess-trainer-v1';
+// The cache name carries a build id (replaced at build time by
+// vercel_build.sh). A new build => new cache name => the activate handler
+// clears the old cache and fresh assets are fetched, so users always get the
+// latest deploy instead of a stale cached one.
+const CACHE = 'speed-chess-trainer-__BUILD_ID__';
 const PRECACHE = [
   'index.html',
   'flutter_bootstrap.js',

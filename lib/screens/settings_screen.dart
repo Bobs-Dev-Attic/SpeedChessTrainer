@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../build_info.dart';
 import '../models/board_theme.dart';
 import '../models/time_control.dart';
 import '../services/install_prompt.dart';
@@ -93,7 +94,8 @@ class _AboutSection extends StatelessWidget {
               return ListTile(
                 leading: const Icon(Icons.info_outline),
                 title: const Text('Version'),
-                subtitle: Text(version),
+                subtitle: Text('$version\n${BuildInfo.summary}'),
+                isThreeLine: true,
               );
             },
           ),
