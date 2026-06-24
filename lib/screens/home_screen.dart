@@ -104,7 +104,11 @@ class _Hero extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text('♞', style: TextStyle(fontSize: 56, color: Colors.white)),
+          const Text('♞',
+              style: TextStyle(
+                  fontSize: 56,
+                  fontFamily: 'NotoChessSymbols',
+                  color: Colors.white)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -290,7 +294,8 @@ class _SidePicker extends StatelessWidget {
         ButtonSegment(
           value: PlayerSide.white,
           label: Text('White'),
-          icon: Text('♔', style: TextStyle(fontSize: 18)),
+          icon: Text('♔',
+              style: TextStyle(fontSize: 18, fontFamily: 'NotoChessSymbols')),
         ),
         ButtonSegment(
           value: PlayerSide.random,
@@ -300,7 +305,8 @@ class _SidePicker extends StatelessWidget {
         ButtonSegment(
           value: PlayerSide.black,
           label: Text('Black'),
-          icon: Text('♚', style: TextStyle(fontSize: 18)),
+          icon: Text('♚',
+              style: TextStyle(fontSize: 18, fontFamily: 'NotoChessSymbols')),
         ),
       ],
       selected: {settings.playerSide},

@@ -180,7 +180,10 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
                 style: TextStyle(
                   fontSize: squareSize * 0.78,
                   height: 1.0,
-                  fontFamilyFallback: const ['NotoChessSymbols'],
+                  // Force the bundled monochrome chess font so the text
+                  // colour is honoured (otherwise an emoji/colour font can
+                  // render every piece as a solid black glyph).
+                  fontFamily: 'NotoChessSymbols',
                   color: piece.color == ch.Color.WHITE
                       ? Colors.white
                       : const Color(0xFF1A1A1A),
@@ -325,9 +328,12 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
                   padding: const EdgeInsets.all(8),
                   child: Text(
                     PieceGlyphs.forLetter(p),
-                    style: TextStyle(fontSize: 44, color: color, shadows: const [
-                      Shadow(color: Colors.black26, blurRadius: 2),
-                    ]),
+                    style: TextStyle(
+                      fontSize: 44,
+                      fontFamily: 'NotoChessSymbols',
+                      color: color,
+                      shadows: const [Shadow(color: Colors.black26, blurRadius: 2)],
+                    ),
                   ),
                 ),
               ),

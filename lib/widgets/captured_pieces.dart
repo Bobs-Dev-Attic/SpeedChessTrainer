@@ -29,6 +29,7 @@ class CapturedPieces extends StatelessWidget {
                   PieceGlyphs.forLetter(letter),
                   style: const TextStyle(
                     fontSize: 18,
+                    fontFamily: 'NotoChessSymbols',
                     color: Color(0xFF1A1A1A),
                     shadows: [Shadow(color: Colors.white30, blurRadius: 1)],
                   ),
