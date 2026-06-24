@@ -16,7 +16,7 @@ class SettingsProvider extends ChangeNotifier {
     _load();
   }
 
-  final SharedPreferences _prefs;
+  final SharedPreferences? _prefs;
 
   ThemeMode _themeMode = ThemeMode.dark;
   Color _accent = const Color(0xFF769656);
@@ -56,55 +56,55 @@ class SettingsProvider extends ChangeNotifier {
   // ---- mutations -----------------------------------------------------------
   void setThemeMode(ThemeMode mode) {
     _themeMode = mode;
-    _prefs.setString('themeMode', mode.name);
+    _prefs?.setString('themeMode', mode.name);
     notifyListeners();
   }
 
   void setAccent(Color color) {
     _accent = color;
-    _prefs.setInt('accent', color.value);
+    _prefs?.setInt('accent', color.value);
     notifyListeners();
   }
 
   void setBoardTheme(String id) {
     _boardThemeId = id;
-    _prefs.setString('boardTheme', id);
+    _prefs?.setString('boardTheme', id);
     notifyListeners();
   }
 
   void setShowLegalMoves(bool v) {
     _showLegalMoves = v;
-    _prefs.setBool('showLegalMoves', v);
+    _prefs?.setBool('showLegalMoves', v);
     notifyListeners();
   }
 
   void setShowCoordinates(bool v) {
     _showCoordinates = v;
-    _prefs.setBool('showCoordinates', v);
+    _prefs?.setBool('showCoordinates', v);
     notifyListeners();
   }
 
   void setShowLastMove(bool v) {
     _showLastMove = v;
-    _prefs.setBool('showLastMove', v);
+    _prefs?.setBool('showLastMove', v);
     notifyListeners();
   }
 
   void setHintsEnabled(bool v) {
     _hintsEnabled = v;
-    _prefs.setBool('hintsEnabled', v);
+    _prefs?.setBool('hintsEnabled', v);
     notifyListeners();
   }
 
   void setAutoQueen(bool v) {
     _autoQueen = v;
-    _prefs.setBool('autoQueen', v);
+    _prefs?.setBool('autoQueen', v);
     notifyListeners();
   }
 
   void setTimeControl(TimeControl tc) {
     _timeControl = tc;
-    _prefs.setString('timeControl',
+    _prefs?.setString('timeControl',
         '${tc.name}|${tc.baseSeconds}|${tc.incrementSeconds}');
     notifyListeners();
   }
@@ -113,24 +113,24 @@ class SettingsProvider extends ChangeNotifier {
     _opponentId = id;
     // Choosing a new opponent clears any custom personality override.
     _customPersonality = null;
-    _prefs.setString('opponent', id);
-    _prefs.remove('customPersonality');
+    _prefs?.setString('opponent', id);
+    _prefs?.remove('customPersonality');
     notifyListeners();
   }
 
   void setPlayerSide(PlayerSide side) {
     _playerSide = side;
-    _prefs.setString('playerSide', side.name);
+    _prefs?.setString('playerSide', side.name);
     notifyListeners();
   }
 
   void setCustomPersonality(Personality? p) {
     _customPersonality = p;
     if (p == null) {
-      _prefs.remove('customPersonality');
+      _prefs?.remove('customPersonality');
     } else {
       final j = p.toJson();
-      _prefs.setString(
+      _prefs?.setString(
         'customPersonality',
         '${j['aggression']}|${j['riskTolerance']}|${j['carelessness']}|'
             '${j['searchDepth']}|${j['thinkTimeMs']}',
@@ -141,23 +141,23 @@ class SettingsProvider extends ChangeNotifier {
 
   // ---- persistence ---------------------------------------------------------
   void _load() {
-    final tm = _prefs.getString('themeMode');
+    final tm = _prefs?.getString('themeMode');
     if (tm != null) {
       _themeMode = ThemeMode.values.firstWhere(
         (m) => m.name == tm,
         orElse: () => ThemeMode.dark,
       );
     }
-    _accent = Color(_prefs.getInt('accent') ?? _accent.value);
-    _boardThemeId = _prefs.getString('boardTheme') ?? _boardThemeId;
-    _showLegalMoves = _prefs.getBool('showLegalMoves') ?? _showLegalMoves;
-    _showCoordinates = _prefs.getBool('showCoordinates') ?? _showCoordinates;
-    _showLastMove = _prefs.getBool('showLastMove') ?? _showLastMove;
-    _hintsEnabled = _prefs.getBool('hintsEnabled') ?? _hintsEnabled;
-    _autoQueen = _prefs.getBool('autoQueen') ?? _autoQueen;
-    _opponentId = _prefs.getString('opponent') ?? _opponentId;
+    _accent = Color(_prefs?.getInt('accent') ?? _accent.value);
+    _boardThemeId = _prefs?.getString('boardTheme') ?? _boardThemeId;
+    _showLegalMoves = _prefs?.getBool('showLegalMoves') ?? _showLegalMoves;
+    _showCoordinates = _prefs?.getBool('showCoordinates') ?? _showCoordinates;
+    _showLastMove = _prefs?.getBool('showLastMove') ?? _showLastMove;
+    _hintsEnabled = _prefs?.getBool('hintsEnabled') ?? _hintsEnabled;
+    _autoQueen = _prefs?.getBool('autoQueen') ?? _autoQueen;
+    _opponentId = _prefs?.getString('opponent') ?? _opponentId;
 
-    final tc = _prefs.getString('timeControl');
+    final tc = _prefs?.getString('timeControl');
     if (tc != null) {
       final parts = tc.split('|');
       if (parts.length == 3) {
@@ -169,7 +169,7 @@ class SettingsProvider extends ChangeNotifier {
       }
     }
 
-    final ps = _prefs.getString('playerSide');
+    final ps = _prefs?.getString('playerSide');
     if (ps != null) {
       _playerSide = PlayerSide.values.firstWhere(
         (s) => s.name == ps,
@@ -177,7 +177,7 @@ class SettingsProvider extends ChangeNotifier {
       );
     }
 
-    final cp = _prefs.getString('customPersonality');
+    final cp = _prefs?.getString('customPersonality');
     if (cp != null) {
       final parts = cp.split('|');
       if (parts.length == 5) {

@@ -13,6 +13,11 @@ class AppThemes {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
+      // Bundled fonts so the app renders fully offline. CanvasKit would
+      // otherwise fetch Roboto and (for the chess piece glyphs) Noto Sans
+      // Symbols from fonts.gstatic.com at runtime.
+      fontFamily: 'Roboto',
+      fontFamilyFallback: const ['NotoChessSymbols'],
       scaffoldBackgroundColor: scheme.surface,
       appBarTheme: AppBarTheme(
         backgroundColor: scheme.surface,

@@ -180,6 +180,7 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget> {
                 style: TextStyle(
                   fontSize: squareSize * 0.78,
                   height: 1.0,
+                  fontFamilyFallback: const ['NotoChessSymbols'],
                   color: piece.color == ch.Color.WHITE
                       ? Colors.white
                       : const Color(0xFF1A1A1A),

@@ -37,13 +37,13 @@ class HomeScreen extends StatelessWidget {
           children: [
             _Hero(scheme: scheme),
             const SizedBox(height: 16),
-            _SectionLabel('Your opponent'),
+            const _SectionLabel('Your opponent'),
             _OpponentCard(opponent: opponent, settings: settings),
             const SizedBox(height: 16),
-            _SectionLabel('Time control'),
+            const _SectionLabel('Time control'),
             _TimeControlRow(settings: settings),
             const SizedBox(height: 16),
-            _SectionLabel('You play as'),
+            const _SectionLabel('You play as'),
             _SidePicker(settings: settings),
             const SizedBox(height: 24),
             FilledButton.icon(

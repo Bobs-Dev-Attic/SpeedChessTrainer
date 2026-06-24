@@ -23,6 +23,8 @@ export PATH="$SDK_DIR/bin:$PATH"
 flutter --version
 flutter config --enable-web --no-analytics
 flutter pub get
-flutter build web --release
+# --no-web-resources-cdn bundles CanvasKit with the app instead of fetching it
+# from gstatic.com at runtime, so the app works even where that CDN is blocked.
+flutter build web --release --no-web-resources-cdn
 
 echo "Build complete → build/web"
